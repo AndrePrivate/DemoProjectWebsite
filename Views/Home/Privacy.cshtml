@@ -1,6 +1,32 @@
 ﻿@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">
+                <h4 class="mb-0">Privacy Notice  & Disclaimer</h4>
+            </div>
+            <div class="card-body">
+                <p class="lead">
+                    This website is intended <strong>for testing purposes only</strong>.
+                </p>
+                <p>
+                    No personal or sensitive information should be entered on this site.
+                    Any details you provide are used solely for demonstration and testing.
+                </p>
+                <p class="text-danger">
+                    If personal information is entered, the site owner accepts no responsibility for its storage, handling, or potential leakage.
+                </p>
+                <hr />
+                <p>
+                    By using this site, you acknowledge that all data entered is non‑confidential and should not include real personal details.
+                </p>
+            </div>
+            <div class="card-footer text-muted text-center">
+                &copy; @DateTime.Now.Year - Demo Project Website
+            </div>
+        </div>
+    </div>
+</div>

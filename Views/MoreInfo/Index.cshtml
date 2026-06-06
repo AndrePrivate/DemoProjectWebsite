@@ -1,0 +1,83 @@
+﻿@model DemoProjectWebsite.Models.MoreInfoViewModel
+@{
+    ViewData["Title"] = "More Info";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+                <h4 class="mb-0">Additional Information</h4>
+            </div>
+            <div class="card-body">
+                <form asp-action="Index" method="post">
+                    <!-- Gender -->
+                    <div class="mb-3">
+                        <label class="form-label">Gender</label><br />
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="Gender" value="Male" />
+                            <label class="form-check-label">Male</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="Gender" value="Female" />
+                            <label class="form-check-label">Female</label>
+                        </div>
+                        <span asp-validation-for="Gender" class="text-danger"></span>
+                    </div>
+                    <hr />
+
+                    <!-- Ethnicity Dropdown -->
+                    <div class="mb-3">
+                        <label asp-for="Ethnicity" class="form-label"></label>
+                        <select asp-for="Ethnicity" class="form-select">
+                            <option value="">-- Select Ethnicity --</option>
+                            <option value="Afr">African</option>
+                            <option value="Asi">Asian</option>
+                            <option value="Eur">European</option>
+                            <option value="Oth">Other</option>
+                        </select>
+                        <span asp-validation-for="Ethnicity" class="text-danger"></span>
+                    </div>
+                    <hr />
+
+                    <!-- Hair Color -->
+                    <div class="mb-3">
+                        <label class="form-label">Hair Color</label><br />
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="HairColor" value="Black" />
+                            <label class="form-check-label">Black</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="HairColor" value="Brown" />
+                            <label class="form-check-label">Brown</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="HairColor" value="Blue" />
+                            <label class="form-check-label">Blue</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" asp-for="HairColor" value="Red" />
+                            <label class="form-check-label">Red</label>
+                        </div>
+                        <span asp-validation-for="HairColor" class="text-danger"></span>
+                    </div>
+                    <hr />
+
+                    <div class="mb-3">
+                        <label asp-for="YearOfBirth" class="form-label">Year of Birth</label>
+                        <input asp-for="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" step="1" value="2000" />
+                        <span asp-validation-for="YearOfBirth" class="text-danger"></span>
+                    </div>
+
+
+                    <button type="submit" class="btn btn-secondary w-100">Submit</button>
+                </form>
+
+                @if (ViewBag.Message != null)
+                {
+                    <div class="alert alert-success mt-3">@ViewBag.Message</div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

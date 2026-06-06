@@ -1,0 +1,18 @@
+﻿@model DemoProjectWebsite.Models.UserModel
+
+@if (Model != null)
+{
+    <div>
+        <p><strong>Name:</strong> @Model.FullName</p>
+        <p><strong>Email:</strong> @Model.Email</p>
+        <p><strong>Phone:</strong> @Model.Phone</p>
+        <p><strong>Gender:</strong> @Model.Gender</p>
+        <p><strong>Ethnicity:</strong> @Model.Ethnicity</p>
+        <p><strong>Hair Color:</strong> @Model.HairColor</p>
+        <p><strong>Year of Birth:</strong> @Model.YearOfBirth</p>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">No member details available.</div>
+}

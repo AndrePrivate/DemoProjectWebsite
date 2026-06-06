@@ -1,0 +1,58 @@
+﻿@model IEnumerable<DemoProjectWebsite.Models.UserModel>
+@{
+    ViewData["Title"] = "Members";
+}
+
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0">Registered Members</h4>
+            </div>
+            <div class="card-body">
+                <ul class="list-group">
+                    @foreach (var user in Model)
+                    {
+                        <li class="list-group-item">
+                            <a href="javascript:void(0);"
+                                   class="member-link"
+                                   data-id="@user.Id">
+                                @user.FullName
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="memberModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title">Member Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="memberDetails">
+                <!-- Details will load here -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.member-link').forEach(link => {
+            link.addEventListener('click', async () => {
+                const id = link.getAttribute('data-id');
+                const response = await fetch(`/Members/Details/${id}`);
+                const html = await response.text();
+                document.getElementById('memberDetails').innerHTML = html;
+                var modal = new bootstrap.Modal(document.getElementById('memberModal'));
+                modal.show();
+            });
+        });
+    </script>
+}
