@@ -1,6 +1,8 @@
 ﻿using DemoProjectWebsite.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace DemoProjectWebsite.Controllers
@@ -23,6 +25,14 @@ namespace DemoProjectWebsite.Controllers
                 // TODO: Replace with real authentication (Identity, DB, etc.)
                 if (model.Username == "admin" && model.Password == "password123")
                 {
+                    var claims = new List<Claim>
+                        {
+                            new Claim(ClaimTypes.Name, model.Username)
+                        };
+                    var identity = new ClaimsIdentity(claims, "MyCookieAuth");
+                    var principal = new ClaimsPrincipal(identity);
+                    await HttpContext.SignInAsync("MyCookieAuth", principal);
+
                     return RedirectToAction("Index", "Home");
                 }
                 ModelState.AddModelError("", "Invalid login attempt.");
