@@ -1,6 +1,7 @@
 ﻿using DemoProjectWebsite.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -9,52 +10,53 @@ namespace DemoProjectWebsite.Controllers
 {
     public class AccountController : Controller
     {
-        [AllowAnonymous]
-        [HttpGet]
-        public IActionResult Login()
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager;
+
+        public AccountController(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
-            return View();
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
+        [HttpGet]
+        public IActionResult Login() => View();
+
         [HttpPost]
-        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                // TODO: Replace with real authentication (Identity, DB, etc.)
-                if (model.Username == "admin" && model.Password == "password123")
-                {
-                    var claims = new List<Claim>
-                        {
-                            new Claim(ClaimTypes.Name, model.Username)
-                        };
-                    var identity = new ClaimsIdentity(claims, "MyCookieAuth");
-                    var principal = new ClaimsPrincipal(identity);
-                    await HttpContext.SignInAsync("MyCookieAuth", principal);
+            if (!ModelState.IsValid) return View(model);
 
-                    return RedirectToAction("Index", "Home");
-                }
-                ModelState.AddModelError("", "Invalid login attempt.");
-            }
+            var result = await _signInManager.PasswordSignInAsync(
+                model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+
+            if (result.Succeeded)
+                return RedirectToAction("Index", "Home");
+
+            ModelState.AddModelError("", "Invalid login attempt.");
             return View(model);
         }
 
-        [AllowAnonymous]
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid) return View(model);
+
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = await _userManager.CreateAsync(user, model.Password);
+
+            if (result.Succeeded)
             {
-                // TODO: Save user to database
-                return RedirectToAction("Login");
+                await _signInManager.SignInAsync(user, isPersistent: false);
+                return RedirectToAction("Index", "Home");
             }
+
+            foreach (var error in result.Errors)
+                ModelState.AddModelError("", error.Description);
+
             return View(model);
         }
     }
