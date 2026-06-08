@@ -59,5 +59,16 @@ namespace DemoProjectWebsite.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync("Identity.Application"); // clear the actual cookie
+            HttpContext.User = new System.Security.Claims.ClaimsPrincipal(); // reset identity
+            return RedirectToAction("Login", "Account");
+        }
+
+
     }
 }
