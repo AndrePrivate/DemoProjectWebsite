@@ -28,13 +28,14 @@ namespace DemoProjectWebsite.Controllers
                 var user = await _userManager.GetUserAsync(User);
 
                 // Pre‑populate Email from Identity
+                model.Name = user.FullName;
                 model.Email = user.Email;
 
                 // Check if a Contact record already exists for this email
                 var existingContact = _context.Contacts.FirstOrDefault(c => c.Email == user.Email);
                 if (existingContact != null)
                 {
-                    model.Name = existingContact.Name;
+                    model.Name = existingContact.Name ?? user.FullName; ;
                     model.Phone = existingContact.Phone;
                     model.Address = existingContact.Address;
                     model.Message = existingContact.Message;
@@ -74,7 +75,7 @@ namespace DemoProjectWebsite.Controllers
                 {
                     contact = new ContactModel
                     {
-                        Name = model.Name,
+                        Name = model.Name ?? user.FullName,
                         Email = model.Email,
                         Phone = model.Phone,
                         Address = model.Address,
@@ -84,7 +85,7 @@ namespace DemoProjectWebsite.Controllers
                 }
                 else
                 {
-                    contact.Name = model.Name;
+                    contact.Name = model.Name ?? user.FullName;
                     contact.Phone = model.Phone;
                     contact.Address = model.Address;
                     contact.Message = model.Message;
