@@ -6,7 +6,7 @@
 <div class="row justify-content-center mt-5">
     <div class="col-md-8">
         <div class="card shadow-sm">
-            <div class="card-header bg-info text-white">
+            <div class="card-header bg-primary text-white">
                 <h4 class="mb-0">Additional Information</h4>
             </div>
             <div class="card-body">
@@ -32,9 +32,9 @@
                         <select asp-for="Ethnicity" class="form-select">
                             <option value="">-- Select Ethnicity --</option>
                             <option value="African">African</option>
-                            <option value="African">Asian</option>
-                            <option value="African">European</option>
-                            <option value="African">Other</option>
+                            <option value="Asian">Asian</option>
+                            <option value="European">European</option>
+                            <option value="Other">Other</option>
                         </select>
                         <span asp-validation-for="Ethnicity" class="text-danger"></span>
                     </div>
@@ -65,12 +65,12 @@
 
                     <div class="mb-3">
                         <label asp-for="YearOfBirth" class="form-label">Year of Birth</label>
-                        <input asp-for="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" step="1" value="2000" />
+                        <input asp-for="YearOfBirth" class="form-control" type="number" min="1900" max="@DateTime.Now.Year" step="1" />
                         <span asp-validation-for="YearOfBirth" class="text-danger"></span>
                     </div>
 
 
-                    <button type="submit" class="btn btn-info w-100">Submit</button>
+                    <button type="submit" class="btn btn-primary w-100">Submit</button>
                 </form>
 
                 @if (ViewBag.Message != null)

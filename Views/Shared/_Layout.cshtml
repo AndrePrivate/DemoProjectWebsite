@@ -23,35 +23,58 @@
                         @if (User.Identity.IsAuthenticated)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "Home" &&
+                                         ViewContext.RouteData.Values["action"].ToString() == "Index" ? "active" : "")"
+                                   asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "Contact" ? "active" : "")"
+                                   asp-area="" asp-controller="Contact" asp-action="Index">Contact</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Contact" asp-action="Index">Contact</a>
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "MoreInfo" ? "active" : "")"
+                                    asp-area="" asp-controller="MoreInfo" asp-action="Index">More Info</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="MoreInfo" asp-action="Index">More Info</a>
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "Members" ? "active" : "")"
+                                    asp-area="" asp-controller="Members" asp-action="Index">Members</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Members" asp-action="Index">Members</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "Home" &&
+                                         ViewContext.RouteData.Values["action"].ToString() == "Privacy" ? "active" : "")"
+                                   asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                             </li>
                             <li class="nav-item">
                                 <form asp-controller="Account" asp-action="Logout" method="post" class="form-inline">
                                     @Html.AntiForgeryToken()
-                                    <button type="submit" class="btn btn-link nav-link text-dark">Logout</button>
+                                    <button type="submit"
+                                            class="nav-link border border-primary rounded bg-light text-dark mx-1 btn btn-link">
+                                        Logout
+                                    </button>
                                 </form>
                             </li>
+
 
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">Login</a>
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "Account" &&
+                                        ViewContext.RouteData.Values["action"].ToString() == "Login" ? "active" : "")"
+                                    asp-area="" asp-controller="Account" asp-action="Login">Login</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">Register</a>
+                                <a class="nav-link border border-primary rounded mx-1
+                                @(ViewContext.RouteData.Values["controller"].ToString() == "Account" &&
+                                        ViewContext.RouteData.Values["action"].ToString() == "Register" ? "active" : "")"
+                                    asp-area="" asp-controller="Account" asp-action="Register">Register</a>
                             </li>
                         }
                     </ul>

@@ -15,7 +15,7 @@ namespace DemoProjectWebsite.Models
 
         [Required]
         [Display(Name = "Year of Birth")]
-        public int YearOfBirth { get; set; }
+        public int YearOfBirth { get; set; } = 2000;
     }
 }
 
