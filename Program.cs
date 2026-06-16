@@ -5,8 +5,22 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var environment = builder.Environment.EnvironmentName;
+
+string connectionString = environment == "Development"
+    ? builder.Configuration.GetConnectionString("DefaultConnection_Local")
+    : builder.Configuration.GetConnectionString("DefaultConnection_Azure");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(
+        connectionString,
+        sqlOptions => sqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorNumbersToAdd: null
+        )
+    )
+);
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
