@@ -28,12 +28,12 @@ namespace DemoProjectWebsite.Controllers
                            select new UserModel
                            {
                                Id = user.Id, // string GUID
-                               FullName = contact != null ? contact.Name : user.FullName ?? user.Email,
-                               Email = user.Email,
-                               Phone = contact != null ? contact.Phone : null,
-                               Gender = info != null ? info.Gender : null,
-                               Ethnicity = info != null ? info.Ethnicity : null,
-                               HairColor = info != null ? info.HairColor : null,
+                               FullName = contact != null ? contact.Name : (user.FullName ?? user.Email ?? string.Empty),
+                               Email = user.Email ?? string.Empty,
+                               Phone = contact != null ? contact.Phone ?? string.Empty : string.Empty,
+                               Gender = info != null ? info.Gender ?? string.Empty : string.Empty,
+                               Ethnicity = info != null ? info.Ethnicity ?? string.Empty : string.Empty,
+                               HairColor = info != null ? info.HairColor ?? string.Empty : string.Empty,
                                YearOfBirth = info != null ? info.YearOfBirth : 0
                            }).AsEnumerable().ToList();
 
@@ -52,12 +52,12 @@ namespace DemoProjectWebsite.Controllers
                           select new UserModel
                           {
                               Id = user.Id,
-                              FullName = contact != null ? contact.Name : user.FullName ?? user.Email,
-                              Email = user.Email,
-                              Phone = contact != null ? contact.Phone : null,
-                              Gender = info != null ? info.Gender : null,
-                              Ethnicity = info != null ? info.Ethnicity : null,
-                              HairColor = info != null ? info.HairColor : null,
+                              FullName = contact != null ? contact.Name : (user.FullName ?? user.Email ?? string.Empty),
+                              Email = user.Email ?? string.Empty,
+                              Phone = contact != null ? contact.Phone ?? string.Empty : string.Empty,
+                              Gender = info != null ? info.Gender ?? string.Empty : string.Empty,
+                              Ethnicity = info != null ? info.Ethnicity ?? string.Empty : string.Empty,
+                              HairColor = info != null ? info.HairColor ?? string.Empty : string.Empty,
                               YearOfBirth = info != null ? info.YearOfBirth : 0
                           }).AsEnumerable().FirstOrDefault();
 

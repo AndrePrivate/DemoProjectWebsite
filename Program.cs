@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 var environment = builder.Environment.EnvironmentName;
 
-string connectionString = environment == "Development"
+string? connectionString = environment == "Development"
     ? builder.Configuration.GetConnectionString("DefaultConnection_Local")
     : builder.Configuration.GetConnectionString("DefaultConnection_Azure");
 

@@ -7,21 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 namespace DemoProjectWebsite.Controllers
 {
     [Authorize]
-    public class MoreInfoController : Controller
+    public class MoreInfoController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public MoreInfoController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Challenge();
+            }
+
             var existingInfo = _context.MoreInfos.FirstOrDefault(m => m.UserId == user.Id);
 
             var model = new MoreInfoViewModel();
@@ -42,6 +41,11 @@ namespace DemoProjectWebsite.Controllers
             if (ModelState.IsValid)
             {
                 var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return Challenge();
+                }
+
                 var existingInfo = _context.MoreInfos.FirstOrDefault(m => m.UserId == user.Id);
 
                 if (existingInfo == null)
@@ -65,7 +69,7 @@ namespace DemoProjectWebsite.Controllers
                     _context.MoreInfos.Update(existingInfo);
                 }
 
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 ViewBag.Message = "Information submitted successfully.";
             }
 

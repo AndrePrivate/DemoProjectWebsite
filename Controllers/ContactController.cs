@@ -7,38 +7,47 @@ using Microsoft.AspNetCore.Mvc;
 namespace DemoProjectWebsite.Controllers
 {
     [Authorize]
-    public class ContactController : Controller
+    public class ContactController(ApplicationDbContext context, UserManager<ApplicationUser> userManager) : Controller
     {
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<ApplicationUser> _userManager;
-
-        public ContactController(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
-        {
-            _context = context;
-            _userManager = userManager;
-        }
+        private readonly ApplicationDbContext _context = context;
+        private readonly UserManager<ApplicationUser> _userManager = userManager;
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var model = new ContactViewModel();
+            // initialize to non-null defaults to avoid null-assign warnings
+            var model = new ContactViewModel
+            {
+                Name = string.Empty,
+                Email = string.Empty,
+                Phone = string.Empty,
+                Address = string.Empty,
+                Message = string.Empty
+            };
 
-            if (User.Identity.IsAuthenticated)
+            if (User?.Identity?.IsAuthenticated == true)
             {
                 var user = await _userManager.GetUserAsync(User);
 
-                // Pre‑populate Email from Identity
-                model.Name = user.FullName;
-                model.Email = user.Email;
-
-                // Check if a Contact record already exists for this email
-                var existingContact = _context.Contacts.FirstOrDefault(c => c.Email == user.Email);
-                if (existingContact != null)
+                if (user != null)
                 {
-                    model.Name = existingContact.Name ?? user.FullName; ;
-                    model.Phone = existingContact.Phone;
-                    model.Address = existingContact.Address;
-                    model.Message = existingContact.Message;
+                    // Pre-populate Email from Identity (guard nulls)
+                    model.Name = user.FullName ?? model.Name;
+                    model.Email = user.Email ?? model.Email;
+
+                    // Only query if we have a non-empty email
+                    if (!string.IsNullOrWhiteSpace(user.Email))
+                    {
+                        var existingContact = _context.Contacts.FirstOrDefault(c => c.Email == user.Email);
+                        if (existingContact != null)
+                        {
+                            model.Name = existingContact.Name ?? user.FullName ?? model.Name;
+                            // coalesce nullable fields back to model to ensure non-null assignment
+                            model.Phone = existingContact.Phone ?? model.Phone;
+                            model.Address = existingContact.Address ?? model.Address;
+                            model.Message = existingContact.Message ?? model.Message;
+                        }
+                    }
                 }
             }
 
@@ -50,7 +59,7 @@ namespace DemoProjectWebsite.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Get current Identity user
+                // Get current Identity user (may be null)
                 var user = await _userManager.GetUserAsync(User);
 
                 if (user != null && user.Email != model.Email)
@@ -75,7 +84,8 @@ namespace DemoProjectWebsite.Controllers
                 {
                     contact = new ContactModel
                     {
-                        Name = model.Name ?? user.FullName,
+                        // Use user?.FullName to avoid dereference if user is null
+                        Name = model.Name ?? user?.FullName ?? string.Empty,
                         Email = model.Email,
                         Phone = model.Phone,
                         Address = model.Address,
@@ -85,7 +95,7 @@ namespace DemoProjectWebsite.Controllers
                 }
                 else
                 {
-                    contact.Name = model.Name ?? user.FullName;
+                    contact.Name = model.Name ?? user?.FullName ?? contact.Name;
                     contact.Phone = model.Phone;
                     contact.Address = model.Address;
                     contact.Message = model.Message;

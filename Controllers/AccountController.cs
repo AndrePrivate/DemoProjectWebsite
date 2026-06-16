@@ -28,7 +28,7 @@ namespace DemoProjectWebsite.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var result = await _signInManager.PasswordSignInAsync(
-                model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                model.Email!, model.Password!, model.RememberMe, lockoutOnFailure: false);
 
             if (result.Succeeded)
                 return RedirectToAction("Index", "Home");
@@ -46,7 +46,7 @@ namespace DemoProjectWebsite.Controllers
             if (!ModelState.IsValid) return View(model);
 
             var user = new ApplicationUser { UserName = model.Email, Email = model.Email, FullName = model.FullName };
-            var result = await _userManager.CreateAsync(user, model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password!);
 
             if (result.Succeeded)
             {
